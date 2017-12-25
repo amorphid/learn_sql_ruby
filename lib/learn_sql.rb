@@ -10,6 +10,7 @@ module LearnSQL
   class << self
     def query(sql,params=[])
       raise "not connected" unless @conn
+      raise "query not terminated by semicolon" unless sql.strip =~ /;\z/
       @conn.exec_params(sql,params).values
     end
 
