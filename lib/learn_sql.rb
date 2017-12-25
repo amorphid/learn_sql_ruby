@@ -6,29 +6,27 @@ require "learn_sql/version"
 
 module LearnSQL
   DB = "learn_sql_ruby".freeze
-  
+
   class << self
-    def conn()
-      @conn
+    def query(sql,params=[])
+      raise "not connected" unless @conn
+      @conn.exec_params(sql,params).values
     end
 
-    def query(sql,params=[])
-      raise "not connected" unless conn()
-      # query database
-      conn().exec_params(sql,params)
+    def prepare()
+      conn = PG.connect(dbname: "template1")
+      conn.exec("CREATE DATABASE #{LearnSQL::DB}")
+      conn.close
+      :ok
     end
 
     def start()
-      raise "already started" if conn()
-
+      raise "already started" if @conn
       # open connection to database (and create database if necessary)
       @conn ||= begin
         PG.connect(dbname: DB)
       rescue
-        temp_conn = PG.connect(dbname: "template1")
-        temp_conn.exec_params("CREATE DATABASE #{DB}")
-        temp_conn.close()
-        PG.connect(dbname: DB)
+        raise "run `rake db:setup` to create & seed database"
       end
       # configure connection to return native types (e.g. return `1`, not `"1"`)
       @conn.type_map_for_results = PG::BasicTypeMapForResults.new(@conn)
@@ -36,10 +34,16 @@ module LearnSQL
     end
 
     def stop()
-      raise "not started" unless conn()
-      # close connection
-      conn().close
+      raise "not started" unless @conn
+      @conn.close
       @conn = nil
+      :ok
+    end
+
+    def teardown()
+      conn = PG.connect(dbname: "template1")
+      conn.exec("DROP DATABASE #{LearnSQL::DB}")
+      conn.close()
       :ok
     end
   end
