@@ -4,7 +4,8 @@ RSpec.describe LearnSQL do
       CREATE TABLE coconuts (
         id serial,
         weight_lbs int,
-        milk_oz int
+        milk_oz int,
+        PRIMARY KEY (id)
       );
     })
     LearnSQL.query(%q{

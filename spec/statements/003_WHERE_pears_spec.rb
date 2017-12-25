@@ -4,7 +4,8 @@ RSpec.describe LearnSQL do
       CREATE TABLE pears (
         id serial,
         variety character varying,
-        seed_count int
+        seed_count int,
+        PRIMARY KEY (id)
       );
     })
     LearnSQL.query(%q{
