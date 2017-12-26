@@ -22,7 +22,6 @@ RSpec.describe LearnSQL do
       "Southern Hemisphere"
     ]
     LearnSQL.query(sql,params)
-  )
   end
 
   after do
