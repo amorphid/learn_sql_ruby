@@ -12,3 +12,5 @@
 
 # ignore Gemfile.lock
 Gemfile.lock
+
+# ignore RSpec test suit temp files
