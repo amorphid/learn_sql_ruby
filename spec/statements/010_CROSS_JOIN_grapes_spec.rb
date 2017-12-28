@@ -1,4 +1,4 @@
-RSpec.describe LearnSQL do
+RSpec.describe "CROSS JOIN" do
   before do
     LearnSQL.query(%q{
       CREATE TABLE grapes (
@@ -35,26 +35,24 @@ RSpec.describe LearnSQL do
     LearnSQL.query("DROP TABLE skus;")
   end
 
-  describe "CROSS JOIN" do
-    it "All permutations of possible grape SKUs" do
-      actual = LearnSQL.query(%q{
-        SELECT grapes.color,grapes.is_seedless,skus.size,skus.price_cents
-        FROM grapes
-        CROSS JOIN skus
-        ORDER BY grapes.id,skus.id;
-      })
-      expected = [
-        # grapes.color,grapes.is_seedless,skus.size,skus.price_cents
-        ["green",true,"S",199],
-        ["green",true,"L",399],
-        ["green",false,"S",199],
-        ["green",false,"L",399],
-        ["purple",true,"S",199],
-        ["purple",true,"L",399],
-        ["purple",false,"S",199],
-        ["purple",false,"L",399],
-      ]
-      expect(actual).to eq(expected)
-    end
+  it "All permutations of possible grape SKUs" do
+    actual = LearnSQL.query(%q{
+      SELECT grapes.color,grapes.is_seedless,skus.size,skus.price_cents
+      FROM grapes
+      CROSS JOIN skus
+      ORDER BY grapes.id,skus.id;
+    })
+    expected = [
+      # grapes.color,grapes.is_seedless,skus.size,skus.price_cents
+      ["green",true,"S",199],
+      ["green",true,"L",399],
+      ["green",false,"S",199],
+      ["green",false,"L",399],
+      ["purple",true,"S",199],
+      ["purple",true,"L",399],
+      ["purple",false,"S",199],
+      ["purple",false,"L",399],
+    ]
+    expect(actual).to eq(expected)
   end
 end

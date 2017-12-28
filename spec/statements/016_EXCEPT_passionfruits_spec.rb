@@ -1,4 +1,4 @@
-RSpec.describe LearnSQL do
+RSpec.describe "EXCEPT" do
   before do
     LearnSQL.query(%q{
       CREATE TABLE passionfruits (
@@ -37,27 +37,25 @@ RSpec.describe LearnSQL do
     LearnSQL.query("DROP TABLE powerful_passionfruits;")
   end
 
-  describe "EXCEPT" do
-    it "any passionfruit that is not both rich and powerful" do
-      actual = LearnSQL.query(%q{
-        SELECT id,name,is_rich
-        FROM passionfruits
-        EXCEPT
-        SELECT passionfruits.id,passionfruits.name,passionfruits.is_rich
-        FROM passionfruits
-        INNER JOIN powerful_passionfruits
-        ON passionfruits.id = powerful_passionfruits.passionfruit_id
-        WHERE passionfruits.is_rich = TRUE
-        ORDER BY id;
-      })
-      expected = [
-        # id,name,is_rich
-        [2,"Susie",true],
-        [4,"George",false],
-        [5,"Amanda",false],
-        [6,"Stinky",false],
-      ]
-      expect(actual).to eq(expected)
-    end
+  it "any passionfruit that is not both rich and powerful" do
+    actual = LearnSQL.query(%q{
+      SELECT id,name,is_rich
+      FROM passionfruits
+      EXCEPT
+      SELECT passionfruits.id,passionfruits.name,passionfruits.is_rich
+      FROM passionfruits
+      INNER JOIN powerful_passionfruits
+      ON passionfruits.id = powerful_passionfruits.passionfruit_id
+      WHERE passionfruits.is_rich = TRUE
+      ORDER BY id;
+    })
+    expected = [
+      # id,name,is_rich
+      [2,"Susie",true],
+      [4,"George",false],
+      [5,"Amanda",false],
+      [6,"Stinky",false],
+    ]
+    expect(actual).to eq(expected)
   end
 end

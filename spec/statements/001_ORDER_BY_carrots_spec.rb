@@ -1,4 +1,4 @@
-RSpec.describe LearnSQL do
+RSpec.describe "ORDER BY" do
   before do
     LearnSQL.query(%q{
       CREATE TABLE carrots (
@@ -19,51 +19,49 @@ RSpec.describe LearnSQL do
   after do
     LearnSQL.query("DROP TABLE carrots;")
   end
+  
+  it "length_mm using default order" do
+    actual = LearnSQL.query(%q{
+      SELECT length_mm,carotene_mcg
+      FROM carrots
+      ORDER BY length_mm;
+    })
+    expected = [
+      # length_mm,carotene_mcg
+      [177,8286],
+      [178,8285],
+      [179,8287],
+    ]
+    expect(actual).to eq(expected)
+  end
 
-  describe "ORDER BY" do
-    it "length_mm using default order" do
-      actual = LearnSQL.query(%q{
-        SELECT length_mm,carotene_mcg
-        FROM carrots
-        ORDER BY length_mm;
-      })
-      expected = [
-        # length_mm,carotene_mcg
-        [177,8286],
-        [178,8285],
-        [179,8287],
-      ]
-      expect(actual).to eq(expected)
-    end
+  it "length_mm ascending" do
+    actual = LearnSQL.query(%q{
+      SELECT length_mm,carotene_mcg
+      FROM carrots
+      ORDER BY length_mm ASC;
+    })
+    expected = [
+      # length_mm,carotene_mcg
+      [177,8286],
+      [178,8285],
+      [179,8287],
+    ]
+    expect(actual).to eq(expected)
+  end
 
-    it "length_mm ascending" do
-      actual = LearnSQL.query(%q{
-        SELECT length_mm,carotene_mcg
-        FROM carrots
-        ORDER BY length_mm ASC;
-      })
-      expected = [
-        # length_mm,carotene_mcg
-        [177,8286],
-        [178,8285],
-        [179,8287],
-      ]
-      expect(actual).to eq(expected)
-    end
-
-    it "length_mm descending" do
-      actual = LearnSQL.query(%q{
-        SELECT length_mm,carotene_mcg
-        FROM carrots
-        ORDER BY length_mm DESC;
-      })
-      expected = [
-        # length_mm,carotene_mcg
-        [179,8287],
-        [178,8285],
-        [177,8286],
-      ]
-      expect(actual).to eq(expected)
-    end
+  it "length_mm descending" do
+    actual = LearnSQL.query(%q{
+      SELECT length_mm,carotene_mcg
+      FROM carrots
+      ORDER BY length_mm DESC;
+    })
+    expected = [
+      # length_mm,carotene_mcg
+      [179,8287],
+      [178,8285],
+      [177,8286],
+    ]
+    expect(actual).to eq(expected)
   end
 end

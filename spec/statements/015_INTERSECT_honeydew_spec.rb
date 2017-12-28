@@ -1,4 +1,4 @@
-RSpec.describe LearnSQL do
+RSpec.describe "INTERSECT" do
   before do
     LearnSQL.query(%q{
       CREATE TABLE honeydew (
@@ -35,22 +35,20 @@ RSpec.describe LearnSQL do
     LearnSQL.query("DROP TABLE imitation_honeydew;")
   end
 
-  describe "INTERSECT" do
-    it "honeydew shapes which are counterfeited" do
-      actual = LearnSQL.query(%q{
-        SELECT shape
-        FROM honeydew
-        INTERSECT
-        SELECT shape
-        FROM imitation_honeydew
-        ORDER BY shape;
-      })
-      expected = [
-        # shape
-        ['actually round'],
-        ['basically a brick'],
-      ]
-      expect(actual).to eq(expected)
-    end
+  it "honeydew shapes which are counterfeited" do
+    actual = LearnSQL.query(%q{
+      SELECT shape
+      FROM honeydew
+      INTERSECT
+      SELECT shape
+      FROM imitation_honeydew
+      ORDER BY shape;
+    })
+    expected = [
+      # shape
+      ['actually round'],
+      ['basically a brick'],
+    ]
+    expect(actual).to eq(expected)
   end
 end

@@ -1,4 +1,4 @@
-RSpec.describe LearnSQL do
+RSpec.describe "SUBQUERY" do
   before do
     LearnSQL.query(%q{
       CREATE TABLE raisins (
@@ -22,23 +22,21 @@ RSpec.describe LearnSQL do
     LearnSQL.query("DROP TABLE raisins;")
   end
 
-  describe "SUBQUERY" do
-    it "select raisins which weigh more than average" do
-      actual = LearnSQL.query(%q{
-        SELECT id,weight_g
+  it "select raisins which weigh more than average" do
+    actual = LearnSQL.query(%q{
+      SELECT id,weight_g
+      FROM raisins
+      WHERE weight_g > (
+        SELECT AVG(weight_g)
         FROM raisins
-        WHERE weight_g > (
-          SELECT AVG(weight_g)
-          FROM raisins
-        );
-      })
-      expected = [
-        # id,weight_g
-        [3,3],
-        [4,3],
-        [5,4],
-      ]
-      expect(actual).to eq(expected)
-    end
+      );
+    })
+    expected = [
+      # id,weight_g
+      [3,3],
+      [4,3],
+      [5,4],
+    ]
+    expect(actual).to eq(expected)
   end
 end

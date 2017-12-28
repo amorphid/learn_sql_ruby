@@ -1,4 +1,4 @@
-RSpec.describe LearnSQL do
+RSpec.describe "GROUP BY" do
   before do
     LearnSQL.query(%q{
       CREATE TABLE cherries (
@@ -23,20 +23,18 @@ RSpec.describe LearnSQL do
     LearnSQL.query("DROP TABLE cherries;")
   end
 
-  describe "GROUP BY" do
-    it "is_sweet w/ count" do
-      actual = LearnSQL.query(%q{
-        SELECT is_sweet,COUNT (id) AS count
-        FROM cherries
-        GROUP BY is_sweet
-        ORDER BY is_sweet DESC;
-      })
-      expected = [
-        # is_sweet,count
-        [true,4],
-        [false,2],
-      ]
-      expect(actual).to eq(expected)
-    end
+  it "is_sweet w/ count" do
+    actual = LearnSQL.query(%q{
+      SELECT is_sweet,COUNT (id) AS count
+      FROM cherries
+      GROUP BY is_sweet
+      ORDER BY is_sweet DESC;
+    })
+    expected = [
+      # is_sweet,count
+      [true,4],
+      [false,2],
+    ]
+    expect(actual).to eq(expected)
   end
 end
