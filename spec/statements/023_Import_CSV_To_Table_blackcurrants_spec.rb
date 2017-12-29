@@ -2,7 +2,7 @@ require "csv"
 require "fileutils"
 
 RSpec.describe "Import CSV To Table" do
-  CSV_PATH = File.join(Dir.pwd,"spec","tmp","blackcurrants.csv")
+  csv_path = File.join(Dir.pwd,"spec","tmp","blackcurrants.csv")
 
   before do
     data = CSV.generate do |csv|
@@ -11,7 +11,7 @@ RSpec.describe "Import CSV To Table" do
       csv << [true]
       csv << [true]
     end
-    File.write(CSV_PATH,data)
+    File.write(csv_path,data)
     LearnSQL.query(%q{
       CREATE TABLE blackcurrants (
         id SERIAL,
@@ -22,7 +22,7 @@ RSpec.describe "Import CSV To Table" do
   end
 
   after do
-    FileUtils.rm(CSV_PATH)
+    FileUtils.rm(csv_path)
     LearnSQL.query("DROP TABLE blackcurrants;")
   end
 
@@ -30,7 +30,7 @@ RSpec.describe "Import CSV To Table" do
     expect {
       LearnSQL.query(%Q{
         COPY blackcurrants(is_blackcurrant)
-        FROM '#{CSV_PATH}'
+        FROM '#{csv_path}'
         DELIMITER ',' CSV HEADER;
       })
     }

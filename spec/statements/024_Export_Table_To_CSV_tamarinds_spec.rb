@@ -2,7 +2,7 @@ require "csv"
 require "fileutils"
 
 RSpec.describe "Export Table To CSV" do
-  CSV_PATH = File.join(Dir.pwd,"spec","tmp","tamarinds.csv")
+  csv_path = File.join(Dir.pwd,"spec","tmp","tamarinds.csv")
 
   before do
     LearnSQL.query(%q{
@@ -21,8 +21,7 @@ RSpec.describe "Export Table To CSV" do
   end
 
   after do
-    # require 'pry'; binding.pry
-    FileUtils.rm(CSV_PATH)
+    FileUtils.rm(csv_path)
     LearnSQL.query("DROP TABLE tamarinds;")
   end
 
@@ -30,13 +29,13 @@ RSpec.describe "Export Table To CSV" do
     expect {
       LearnSQL.query(%{
         COPY tamarinds
-        TO '#{CSV_PATH}'
+        TO '#{csv_path}'
         DELIMITER ',' CSV;
       })
     }
     .to change {
-      File.exist?(CSV_PATH) && [].tap do |data|
-        File.read(CSV_PATH).tap  do |csv|
+      File.exist?(csv_path) && [].tap do |data|
+        File.read(csv_path).tap  do |csv|
           CSV.parse(csv) {|row| data << row}
         end
       end
@@ -53,13 +52,13 @@ RSpec.describe "Export Table To CSV" do
     expect {
       LearnSQL.query(%{
         COPY tamarinds
-        TO '#{CSV_PATH}'
+        TO '#{csv_path}'
         DELIMITER ',' CSV HEADER;
       })
     }
     .to change {
-      File.exist?(CSV_PATH) && [].tap do |data|
-        File.read(CSV_PATH).tap  do |csv|
+      File.exist?(csv_path) && [].tap do |data|
+        File.read(csv_path).tap  do |csv|
           CSV.parse(csv) {|row| data << row}
         end
       end
